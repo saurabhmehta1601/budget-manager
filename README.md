@@ -1,3 +1,8 @@
+# Project overview
+
+This project helps in keeping track of your budget.
+The  information of all expenses are stored  in local storage.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

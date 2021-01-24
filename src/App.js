@@ -1,27 +1,30 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./App.css";
 import { Alert } from "./components/Alert";
 import { ExpenseForm } from "./components/ExpenseForm";
 import { ExpenseList } from "./components/ExpenseList";
 import { v4 as uuid } from "uuid";
 
-const initialExpenses = [
-  {
-    id: uuid(),
-    charge: "rent",
-    amount: 1000,
-  },
-  {
-    id: uuid(),
-    charge: "car payment",
-    amount: 600,
-  },
-  {
-    id: uuid(),
-    charge: "credit card bill",
-    amount: 1300,
-  },
-];
+// const initialExpenses = [
+//   {
+//     id: uuid(),
+//     charge: "rent",
+//     amount: 1000,
+//   },
+//   {
+//     id: uuid(),
+//     charge: "car payment",
+//     amount: 600,
+//   },
+//   {
+//     id: uuid(),
+//     charge: "credit card bill",
+//     amount: 1300,
+//   },
+// ];
+
+const initialExpenses= localStorage.getItem('expenses') ? JSON.parse(localStorage.getItem('expenses')) : []
+
 
 function App() {
   const [expenses, setExpenses] = useState(initialExpenses);
@@ -60,12 +63,13 @@ function App() {
     if(amount > 0 && charge!==''){
 
      if(edit){
-      const updated=expenses.find(expense => expense.id=id)
-      updated.charge=charge
-      updated.amount=amount
-      setExpenses([...expenses])
+      const updated=expenses.map(expense => expense.id===id ? {...expense,amount,charge} : expense  )
+      
+      setExpenses(updated)
       setCharge("")
       setAmount("")
+      setAlert({show:true,text:"Item edited ",type:"success"})
+      setTimeout(()=>setAlert({show:false}),3000)
       setEdit(false)
       return
      }
@@ -87,6 +91,9 @@ function App() {
     setTimeout(()=>{setAlert({show:false})},3000)
   };
 
+  useEffect(()=>{
+    localStorage.setItem('expenses',JSON.stringify(expenses))
+  },[expenses])
 
   return (
     <>
