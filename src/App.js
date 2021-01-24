@@ -29,6 +29,9 @@ function App() {
   const [charge, setCharge] = useState("");
   const [amount, setAmount] = useState("");
   const [alert,setAlert]=useState({show:false})
+  const [edit,setEdit]=useState(false)
+  const [id,setId]=useState(0)
+  
 
   const handleCharge = (e) => {
     setCharge(e.target.value);
@@ -38,13 +41,36 @@ function App() {
   };
 
   const clearItems = ()=>{setExpenses([]);}
+
   const handleDelete = (id)=>{setExpenses(expenses.filter(expense => expense.id !== id))}
-  const handleEdit = (id)=>{}
+  
+  const handleEdit = (id)=>{
+    setId(id)
+    setEdit(true)
+    const expense=expenses.find(expense => expense.id===id)
+    const {charge,amount}= expense
+    setCharge(charge)
+    setAmount(amount)
+    
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if(amount > 0 && charge!==''){
+
+     if(edit){
+      const updated=expenses.find(expense => expense.id=id)
+      updated.charge=charge
+      updated.amount=amount
+      setExpenses([...expenses])
+      setCharge("")
+      setAmount("")
+      setEdit(false)
+      return
+     }
+    
+
       const newExpense = {
         id: uuid(),
         amount,
@@ -53,12 +79,15 @@ function App() {
       setExpenses([newExpense, ...expenses]);
       setCharge("");
       setAmount("");
+     
       setAlert({show:true,text:"Item added",type:"success"})
     }else{
         setAlert({show:true,text:"Amount should be bigger than 0 and charge can't be empty",type:"danger"})
     }
     setTimeout(()=>{setAlert({show:false})},3000)
   };
+
+
   return (
     <>
     {alert.show &&  <Alert type={alert.type} text={alert.text} />}
@@ -71,6 +100,7 @@ function App() {
           handleSubmit={handleSubmit}
           charge={charge}
           amount={amount}
+          edit={edit}
         />
         <ExpenseList expenses={expenses}  handleDelete={handleDelete} handleEdit={handleEdit} clearItems={clearItems}/>
       </main>
