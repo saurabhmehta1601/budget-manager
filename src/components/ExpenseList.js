@@ -1,15 +1,15 @@
 import React from "react";
 import { ExpenseItem as Item } from "./ExpenseItem";
 import {MdDelete} from 'react-icons/md'
-export const ExpenseList = ({ expenses }) => {
+export const ExpenseList = ({ expenses,clearItems,handleDelete,handleEdit }) => {
   return (
     <>
       <ul className="list">
         {expenses.map((expense) => {
-          return (<Item key={expense.id} expense={expense} />)
+          return (<Item key={expense.id} expense={expense} handleDelete={handleDelete} handleEdit={handleEdit} />)
 })}
       </ul> 
-      {expenses.length && <button className="btn">clear expenses
+      {expenses.length > 0 && <button className="btn" onClick={clearItems}>clear expenses
       <MdDelete className="btn-icon" />
       </button>}
     </>

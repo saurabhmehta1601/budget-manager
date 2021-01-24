@@ -37,6 +37,10 @@ function App() {
     setAmount(e.target.value);
   };
 
+  const clearItems = ()=>{setExpenses([]);}
+  const handleDelete = (id)=>{setExpenses(expenses.filter(expense => expense.id !== id))}
+  const handleEdit = (id)=>{}
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -68,10 +72,10 @@ function App() {
           charge={charge}
           amount={amount}
         />
-        <ExpenseList expenses={expenses} />
+        <ExpenseList expenses={expenses}  handleDelete={handleDelete} handleEdit={handleEdit} clearItems={clearItems}/>
       </main>
       <h1>
-        total spending :{" "}
+        total spending :
         <span className="total">
           $ {expenses.reduce((acc, curr) => acc + parseInt(curr.amount), 0)}
         </span>
